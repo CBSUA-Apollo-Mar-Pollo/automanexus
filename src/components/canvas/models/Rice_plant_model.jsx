@@ -15,7 +15,7 @@ Command: npx gltfjsx@6.5.3 public/models/rice_plant.glb --transform
 import React from "react";
 import { useGLTF } from "@react-three/drei";
 
-export function Model(props) {
+export function RicePlantModel(props) {
   const { nodes } = useGLTF("/models/rice_plant-transformed.glb");
 
   return (
@@ -23,8 +23,8 @@ export function Model(props) {
       {/* 1. THE LEAVES & STALKS */}
       <mesh
         geometry={nodes.Object_3.geometry}
-        position={[-11.419, -1.768, 10.841]}
-        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, 0, 0]}
+        rotation={[0, 0, 0]}
       >
         {/* We inject a custom matte olive/sage green material */}
         <meshStandardMaterial color="#8a9463" roughness={0.8} metalness={0.1} />
@@ -33,8 +33,8 @@ export function Model(props) {
       {/* 2. THE RICE GRAINS */}
       <mesh
         geometry={nodes.Object_4.geometry}
-        position={[-11.419, -1.768, 10.841]}
-        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, 0, 0]}
+        rotation={[0, 0, 0]}
       >
         {/* We inject a custom soft golden/cream material */}
         <meshStandardMaterial color="#ded19c" roughness={0.9} metalness={0.0} />
