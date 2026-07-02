@@ -3,6 +3,9 @@ import { Canvas } from "@react-three/fiber";
 import { RicePlantModel } from "./components/canvas/models/Rice_plant_model";
 import { Platform } from "./components/platform";
 import React, { useMemo, useState } from "react";
+import { LowPolyTreeModel } from "./components/canvas/models/Low_poly_tree_model";
+import { LowPolyTreeModel2 } from "./components/canvas/models/Low_poly_tree_2";
+import { LowPolyTreeModel3 } from "./components/canvas/models/Low_poly_tree_3";
 
 // A single low-poly tile with a green top and brown base
 const pseudoRandom = (x, z, seed) => {
@@ -11,6 +14,14 @@ const pseudoRandom = (x, z, seed) => {
 };
 
 function FarmTile({ position, hasTree = false }) {
+  const treeSettings = useMemo(() => {
+    if (!hasTree) return null;
+
+    const treeType = Math.floor(Math.random() * 3);
+
+    return { treeType };
+  }, [hasTree]);
+
   return (
     <group position={position}>
       {/* Soil base */}
@@ -20,14 +31,13 @@ function FarmTile({ position, hasTree = false }) {
       </mesh>
 
       {/* Grass top */}
-      <mesh position={[0, 0.525, 0]} castShadow receiveShadow>
-        <boxGeometry args={[0.9, 0.05, 0.94]} />
+      <mesh position={[0, 0.511, 0]} castShadow receiveShadow>
+        <boxGeometry args={[0.86, 0.08, 0.92]} />
         <meshStandardMaterial color="#807C1C" roughness={0.8} flatShading />
       </mesh>
 
-      {/* --- Rock Decorations Sticking Out of the Sides --- */}
+      {/* --- Rock Decorations --- */}
       <group>
-        {/* Rock 1: Front side, slightly left */}
         <mesh
           position={[-0.2, 0.12, 0.46]}
           rotation={[0.4, 0.2, 0.5]}
@@ -36,8 +46,6 @@ function FarmTile({ position, hasTree = false }) {
           <dodecahedronGeometry args={[0.09, 0]} />
           <meshStandardMaterial color="#888888" roughness={0.9} flatShading />
         </mesh>
-
-        {/* Rock 2: Front side, further right and lower */}
         <mesh
           position={[0.3, 0.08, 0.47]}
           rotation={[0.9, -0.4, 0.1]}
@@ -46,8 +54,6 @@ function FarmTile({ position, hasTree = false }) {
           <dodecahedronGeometry args={[0.12, 0]} />
           <meshStandardMaterial color="#999999" roughness={0.9} flatShading />
         </mesh>
-
-        {/* Rock 3: Right side */}
         <mesh
           position={[0.47, 0.15, -0.1]}
           rotation={[0.2, 0.8, -0.5]}
@@ -56,8 +62,6 @@ function FarmTile({ position, hasTree = false }) {
           <dodecahedronGeometry args={[0.07, 0]} />
           <meshStandardMaterial color="#7a7a7a" roughness={0.9} flatShading />
         </mesh>
-
-        {/* Rock 4: Left side */}
         <mesh
           position={[-0.47, 0.1, 0.15]}
           rotation={[-0.3, 0.5, 0.9]}
@@ -68,13 +72,23 @@ function FarmTile({ position, hasTree = false }) {
         </mesh>
       </group>
 
-      {/* --- ATTACH TREE HERE --- */}
-      {/* Local Y position of 0.55 places the base of the trunk exactly on top of the grass */}
-      {hasTree && <LowPolyTree position={[0, 0.55, 0]} />}
+      {/* --- FIXED TREE ATTACHMENT --- */}
+      {hasTree && treeSettings && (
+        <group
+        /* Stays dead center at X:0 and Z:0, only adjusts Y dynamically */
+        >
+          {treeSettings.treeType === 0 && (
+            <LowPolyTreeModel position={[0, 0.55, 0]} />
+          )}
+          {treeSettings.treeType === 1 && <LowPolyTreeModel2 />}
+          {treeSettings.treeType === 2 && (
+            <LowPolyTreeModel3 position={[0, 0.55, 0]} />
+          )}
+        </group>
+      )}
     </group>
   );
 }
-
 // A simple low-poly tree clone
 function LowPolyTree({ position }) {
   return (
@@ -102,7 +116,7 @@ function App() {
       initialTiles.push({
         id: `${x}-${z}`,
         pos: [
-          (x - (gridSize - 1) / 2) * 0.96,
+          (x - (gridSize - 1) / 2) * 0.9,
           0,
           (z - (gridSize - 1) / 2) * 1.0,
         ],
@@ -121,9 +135,10 @@ function App() {
         camera={{ zoom: 110, position: [0, 5, 4.01] }}
         shadows
       >
+        <OrbitControls />
         <ambientLight intensity={0.6} />
         <directionalLight
-          position={[10, 15, -5]}
+          position={[-120, 60, 50]}
           intensity={1.5}
           castShadow
           shadow-mapSize={[2048, 2048]}
