@@ -53,6 +53,26 @@ Your logic becomes the engine of progress.
 5. Debug and optimize
 6. Scale your automation
 
+## Current Playable Slice
+
+The prototype includes a drone console connected to the 3D field. Choose JavaScript or Python, edit a program in Monaco, and run a harvest command against the next available plant or tree.
+
+JavaScript example:
+
+```js
+const target = drone.findNearest("plant");
+drone.harvest(target);
+```
+
+Python example:
+
+```python
+target = drone.find_nearest("tree")
+drone.harvest(target)
+```
+
+Both languages currently use a safe command parser that translates the supported drone API into game actions. They are not yet unrestricted JavaScript or Python interpreters. Future gameplay steps include movement timing, multiple commands per program, inventory, and resource processing.
+
 ---
 
 ## Tech Stack

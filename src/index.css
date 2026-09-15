@@ -1,6 +1,412 @@
 @import "tailwindcss";
+
+:root {
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  color: #f7f4eb;
+  background: #192a2b;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  display: flex;
+  min-width: 320px;
   min-height: 100vh;
+  background: #192a2b;
+}
+
+button {
+  font: inherit;
+}
+
+.game-shell {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  min-height: 100vh;
+  background: #7895a3;
+}
+
+.topbar {
+  position: absolute;
+  z-index: 4;
+  top: 14px;
+  right: 14px;
+  left: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+}
+.resource-strip {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.resource-item {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  min-width: 40px;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+.resource-item strong {
+  font-size: 12px;
+  font-weight: 700;
+}
+.resource-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 25px;
+  color: #243127;
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.25));
+}
+.resource-ore {
+  color: #f5cf57;
+}
+.resource-log {
+  color: #9b5426;
+}
+.resource-seed {
+  color: #b7ca4f;
+}
+.resource-pum {
+  color: #f5a623;
+}
+.resource-gem {
+  color: #b96a99;
+}
+.resource-rub {
+  color: #ee8828;
+}
+.resource-box,
+.resource-kit {
+  color: #d49c57;
+}
+.top-actions {
+  display: flex;
+  gap: 6px;
+  pointer-events: auto;
+}
+.top-actions button,
+.window-buttons button {
+  border: 0;
+  color: #fff;
+  background: #668b00;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.13),
+    0 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+.top-actions button {
+  width: 38px;
+  height: 38px;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+}
+.top-actions button:nth-child(2) {
+  font-family: Georgia, serif;
+  font-size: 18px;
+}
+.top-actions button:nth-child(3) {
+  font-size: 17px;
+}
+
+.world-panel {
+  min-width: 0;
+  height: 100vh;
+  padding: 0;
+}
+.world-heading,
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+.panel-header {
+  cursor: move;
+  user-select: none;
+}
+.panel-header button {
+  cursor: pointer;
+}
+.world-heading {
+  display: none;
+}
+.eyebrow {
+  margin: 0 0 8px;
+  color: #e9c46a;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+h1,
+h2 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-weight: 400;
+}
+h1 {
+  font-size: clamp(30px, 4vw, 58px);
+  line-height: 1;
+}
+h2 {
+  font-size: 25px;
+}
+.resource-counter {
+  padding-top: 18px;
+  color: #a9c1b3;
+  font-size: 13px;
+}
+.resource-counter strong {
+  color: #f7f4eb;
+  font-size: 25px;
+  font-weight: 400;
+}
+.canvas-wrap {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  height: 100vh;
+  min-height: 0;
+  margin-top: 0;
+  overflow: hidden;
+  border: 0;
+  background: #7895a3;
+  box-shadow: none;
+}
+.legend {
+  position: absolute;
+  z-index: 3;
+  bottom: 16px;
+  left: 18px;
+  display: flex;
+  gap: 20px;
+  padding-top: 13px;
+  color: #a9c1b3;
+  font-size: 12px;
+}
+.legend span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  border-radius: 50%;
+}
+.plant-dot {
+  background: #ded19c;
+}
+.tree-dot {
+  background: #9eb045;
+}
+.drone-dot {
+  background: #e9c46a;
+}
+
+.control-panel {
+  position: absolute;
+  z-index: 3;
+  top: 154px;
+  right: 30px;
+  width: min(520px, calc(100vw - 60px));
+  padding: 7px 7px 12px;
+  border: 2px solid #a7a7a7;
+  background: #252525;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35);
+}
+.online-dot {
+  color: #b8d86d;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+.window-buttons {
+  display: flex;
+  gap: 4px;
+}
+.window-buttons button {
+  width: 22px;
+  height: 22px;
+  background: #668b00;
+  font-weight: 900;
+  line-height: 1;
+}
+.control-panel .eyebrow {
+  margin: 1px 0 2px 2px;
+  color: #fff;
+  font-size: 10px;
+}
+.control-panel h2 {
+  color: #e7e7e7;
+  font-family: Consolas, monospace;
+  font-size: 14px;
+}
+.control-panel .instruction {
+  margin: 10px 3px;
+  color: #c4c4c4;
+  font-size: 11px;
+}
+.online-dot::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin: 0 7px 1px 0;
+  border-radius: 50%;
+  background: #b8d86d;
+}
+.instruction {
+  margin: 27px 0 18px;
+  color: #a9c1b3;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.language-switcher {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 10px;
+  padding: 3px;
+  background: #3a3a3a;
+}
+.language-switcher button,
+.reset-button {
+  border: 0;
+  color: #8da8a0;
+  background: transparent;
+  cursor: pointer;
+}
+.language-switcher button {
+  flex: 1;
+  padding: 9px;
+  font-size: 12px;
+}
+.language-switcher button.active {
+  color: #192a2b;
+  background: #e9c46a;
+}
+.editor-frame {
+  overflow: hidden;
+  border: 1px solid #171717;
+}
+.monaco-editor .running-code-line {
+  background: rgba(233, 196, 106, 0.22) !important;
+  box-shadow: inset 3px 0 #e9c46a;
+}
+.monaco-editor .running-code-glyph {
+  width: 8px !important;
+  margin-left: 4px;
+  background: #e9c46a;
+  border-radius: 50%;
+}
+.api-note {
+  padding: 8px 3px 12px;
+  color: #78948c;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.api-note span {
+  margin-right: 8px;
+  color: #e9c46a;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.action-row {
+  display: flex;
+  gap: 10px;
+}
+.run-button {
+  flex: 1;
+  border: 0;
+  padding: 13px 14px;
+  color: #192a2b;
+  background: #e9c46a;
+  cursor: pointer;
+  font-weight: 700;
+  text-align: left;
+}
+.run-button:hover {
+  background: #f4d58a;
+}
+.run-button span {
+  float: right;
+  font-size: 10px;
+  font-weight: 400;
+  opacity: 0.65;
+}
+.reset-button {
+  padding: 0 13px;
+  border: 1px solid #355253;
+  font-size: 12px;
+}
+.reset-button:hover {
+  color: #f7f4eb;
+  border-color: #a9c1b3;
+}
+.console-output {
+  min-height: 70px;
+  margin-top: 12px;
+  padding: 14px;
+  background: #0b1718;
+  border-left: 2px solid #e9c46a;
+}
+.output-label {
+  margin-bottom: 9px;
+  color: #78948c;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+.console-output p {
+  margin: 5px 0;
+  color: #d6e0d4;
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .game-shell {
+    display: block;
+  }
+  .topbar {
+    right: 10px;
+    left: 10px;
+  }
+  .resource-strip {
+    gap: 4px;
+    max-width: calc(100vw - 120px);
+    overflow: hidden;
+  }
+  .resource-item {
+    min-width: 31px;
+  }
+  .resource-item:nth-child(n + 6) {
+    display: none;
+  }
+  .control-panel {
+    top: auto;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    width: auto;
+  }
+  .editor-frame .monaco-editor {
+    max-height: 185px;
+  }
+  .legend {
+    display: none;
+  }
 }
