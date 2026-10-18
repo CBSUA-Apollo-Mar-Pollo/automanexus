@@ -8,6 +8,7 @@ import {
   PINE_TRUNK_MATERIAL,
 } from "./pineAssets";
 import { FOREST_PATCHES, createForestTrees } from "./forestConfig";
+import { isInsidePondShore } from "./pondGeometry";
 import { sampleTerrainHeight } from "./terrainGeometry";
 
 function PineInstances({ trees, shade, tier }) {
@@ -63,7 +64,13 @@ export default function Forest({
   seed = 80521,
   patches = FOREST_PATCHES,
 }) {
-  const trees = useMemo(() => createForestTrees(seed, patches), [patches, seed]);
+  const trees = useMemo(
+    () =>
+      createForestTrees(seed, patches).filter(
+        (tree) => !isInsidePondShore(tree.x, tree.z, 2.5),
+      ),
+    [patches, seed],
+  );
 
   return (
     <group>

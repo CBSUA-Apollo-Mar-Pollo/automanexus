@@ -5,10 +5,11 @@ export default function Terrain({
   size = 260,
   segments = 112,
   seed = 14321,
+  heightOverride,
 }) {
   const geometry = useMemo(
-    () => createTerrainGeometry({ size, segments, seed }),
-    [seed, segments, size],
+    () => createTerrainGeometry({ size, segments, seed, heightOverride }),
+    [heightOverride, seed, segments, size],
   );
 
   return (

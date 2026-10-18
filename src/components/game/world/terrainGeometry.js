@@ -41,6 +41,7 @@ export function createTerrainGeometry({
   size = 260,
   segments = 112,
   seed = 14321,
+  heightOverride,
 } = {}) {
   const random = createSeededRandom(seed);
   const positions = [];
@@ -65,22 +66,28 @@ export function createTerrainGeometry({
     const z = (row / segments - 0.5) * size;
     for (let column = 0; column <= segments; column += 1) {
       const x = (column / segments - 0.5) * size;
-      vertexHeights[row][column] =
+      const baseHeight =
         sampleTerrainHeight(x, z) + (random() - 0.5) * 0.008;
+      vertexHeights[row][column] = heightOverride
+        ? heightOverride(x, z, baseHeight)
+        : baseHeight;
     }
   }
 
   const point = (row, column) => {
     const x = (column / segments - 0.5) * size;
     const z = (row / segments - 0.5) * size;
+    const left = Math.max(column - 1, 0);
+    const right = Math.min(column + 1, segments);
+    const top = Math.max(row - 1, 0);
+    const bottom = Math.min(row + 1, segments);
+    const spacing = size / segments;
     const slopeX =
-      (sampleTerrainHeight(x + 0.1, z) -
-        sampleTerrainHeight(x - 0.1, z)) /
-      0.2;
+      (vertexHeights[row][right] - vertexHeights[row][left]) /
+      ((right - left) * spacing);
     const slopeZ =
-      (sampleTerrainHeight(x, z + 0.1) -
-        sampleTerrainHeight(x, z - 0.1)) /
-      0.2;
+      (vertexHeights[bottom][column] - vertexHeights[top][column]) /
+      ((bottom - top) * spacing);
     const length = Math.hypot(slopeX, 1, slopeZ);
     return {
       position: [x, vertexHeights[row][column], z],

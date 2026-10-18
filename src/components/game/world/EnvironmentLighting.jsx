@@ -1,9 +1,9 @@
 export default function EnvironmentLighting() {
   return (
     <>
-      <ambientLight intensity={1.05} />
+      <ambientLight intensity={0.4} />
       <directionalLight
-        position={[-42, 48, -28]}
+        position={[-42, 28, -28]}
         intensity={2.25}
         castShadow
         shadow-mapSize={[2048, 2048]}

@@ -33,3 +33,28 @@ body,
   display: block;
   touch-action: none;
 }
+
+.camera-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1;
+  border: 1px solid rgb(24 67 41 / 35%);
+  border-radius: 0.5rem;
+  padding: 0.65rem 0.9rem;
+  background: #f3f1d5;
+  color: #214a32;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgb(20 50 30 / 25%);
+}
+
+.camera-toggle:hover {
+  background: #fffde7;
+}
+
+.camera-toggle:focus-visible {
+  outline: 3px solid #214a32;
+  outline-offset: 3px;
+}
